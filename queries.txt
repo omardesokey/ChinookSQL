@@ -1,0 +1,87 @@
+
+/*1. Best selling music genre*/
+
+SELECT G.Name, SUM(IL.UnitPrice * IL.Quantity) Total_sales
+FROM Track T
+JOIN Genre G
+ON T.GenreId = G.GenreId
+JOIN InvoiceLine IL
+ON IL.TrackId = T.TrackId
+
+GROUP BY 1
+ORDER BY 2 DESC
+
+/*2. Best Selling composer*/
+
+SELECT T.Composer, SUM(IL.UnitPrice * IL.Quantity) Total_sales
+FROM Track T
+JOIN InvoiceLine IL
+ON IL.TrackId = T.TrackId
+
+GROUP BY 1
+ORDER BY 2 DESC
+
+/*3. Best sales by country*/
+
+SELECT C.Country,C.PostalCode,SUM(I.Total)as total_sales,COUNT(*) num_of_invoices
+FROM Customer C
+JOIN Invoice I
+ON C.CustomerId = I.CustomerId
+GROUP BY 1
+ORDER BY 3 DESC
+
+/*4. Customer Database by country*/
+
+SELECT Country,COUNT(*)
+
+FROM Customer 
+GROUP BY 1
+ORDER BY 2 DESC
+
+/*5. the best selling sales agent*/
+
+SELECT e.FirstName, SUM(i.Total) as total_sales,e.Country
+FROM Employee e
+JOIN Customer c
+ON E.EmployeeId = C.SupportRepId
+JOIN Invoice i
+ON c.CustomerId = i.CustomerId
+
+GROUP BY 1
+
+/*6. Sales by title*/
+
+SELECT e.Title, SUM(i.Total) as total_sales
+FROM Employee e
+JOIN Customer c
+ON E.EmployeeId = C.SupportRepId
+JOIN Invoice i
+ON c.CustomerId = i.CustomerId
+
+GROUP BY 1
+
+/*7. Files types analysis*/
+
+SELECT m.Name, COUNT(*)
+FROM MediaType m
+JOIN Track t
+ON m.MediaTypeId = t.MediaTypeId
+GROUP BY 1
+ORDER BY 2 DESC
+
+
+/*8.Best Selling artist*/
+
+SELECT AR.Name as artist_name, SUM(IL.UnitPrice * IL.Quantity) Total_sales
+FROM Track T
+JOIN InvoiceLine IL
+ON IL.TrackId = T.TrackId
+JOIN ALBUM AL
+ON AL.AlbumId = T.AlbumId
+JOIN Artist AR
+ON AR.ArtistId = AL.ArtistId
+
+GROUP BY 1
+ORDER BY 2 DESC
+LIMIT 10
+
